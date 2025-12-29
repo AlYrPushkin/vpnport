@@ -4,7 +4,7 @@
             <p class="card__description">
                 {{ label }}
             </p>
-            <UiTgButton :to="to" :label="buttonLabel"/>
+            <UiTgButton :label="buttonLabel"/>
         </div>
     </article>
 </template>
@@ -33,11 +33,9 @@ const props = withDefaults(defineProps<{
     border-radius: 16px;
 
     background-color: var(--surface);
-    /* тёмный фон как на скрине */
     color: var(--color-text, #e5e7eb);
 }
 
-/* обёртка вокруг иконки (круглая как чип) */
 .card__icon {
     flex: 0 0 auto;
     width: 32px;

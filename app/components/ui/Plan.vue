@@ -12,14 +12,24 @@
       <span class="price__original">₽{{ price }}</span>
       <span class="price__discounted" v-if="!!oldPrice">/ <span>₽{{ oldPrice }}</span></span>
     </div>
-    <NuxtLink class="plan__button" to="/#plans">
+    <a
+      class="plan__button"
+      :href="link"
+      target="_blank"
+      rel="noopener"
+      aria-label="Открыть Telegram-бота VPN Port"
+      title="Открыть в Telegram"
+    >
       Оформить подписку
-    </NuxtLink>
+    </a>
   </div>
 </template>
 
 <script setup lang="ts">
 import type {IPlanView} from '../types/plan';
+
+const data = useTgStartLink()
+const link = computed((): string => data.value || 'https://t.me/vpn_portbot')
 
 const {
   name,
