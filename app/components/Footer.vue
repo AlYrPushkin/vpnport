@@ -93,6 +93,7 @@ const description = "Просматривайте сайты не оставля
         padding: 24px;
         padding-bottom: 40px;
         gap: 20px;
+        text-align: center;
     }
     
     .footer h2 {
@@ -106,12 +107,12 @@ const description = "Просматривайте сайты не оставля
         gap: 32px;
         align-items: flex-start;
         width: unset;
-        width: 238px;
+        width: 243px;
         // width: 100%;
     }
     .links__group {
         display: flex;
-        width: 238px;
+        width: 243px;
         justify-content: center;
         align-items: center;
     }

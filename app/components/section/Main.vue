@@ -133,7 +133,7 @@ const description = computed(() => {
 
     .doc_icon {
         top: calc(50% - 27px);
-        right: -15%;
+        right: -5%;
     }
 
     .pl_icon {
@@ -143,7 +143,7 @@ const description = computed(() => {
 
     .ic_icon {
         top: calc(80% - 48px);
-        left: calc((14% + 32px) * -1);
+        left: calc((1% + 32px) * -1);
     }
 
     .tx_icon {
