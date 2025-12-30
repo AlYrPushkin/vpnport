@@ -45,7 +45,7 @@ const description = "Просматривайте сайты не оставля
 <style lang="scss" scoped>
 .footer {
     background-color: #0E0E0E;
-    padding: 24px;
+    padding: 32px;
     border-radius: 24px 24px 0px 0px;
     display: flex;
     flex-direction: column;

@@ -14,7 +14,7 @@
                 <NuxtLink to="/#faq">
                     <span>Как подключить</span>
                 </NuxtLink>
-                <NuxtLink to="/#about">
+                <NuxtLink to="https://t.me/vpnportsupport">
                     <span>Поддержка</span>
                 </NuxtLink>
             </div>
