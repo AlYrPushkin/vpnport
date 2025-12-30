@@ -19,7 +19,7 @@
 import { AI_CARDS } from '../consts';
 
 const title = "AI инструменты,\nбез ограничений"
-const description = "Мы используем протоколы нового поколения,\nкоторые невозможно отличить от обычного\nинтернет-трафика"
+const description = "Идеально чистые IP-адреса для тех,\nкто использует нейросети \nдля работы и творчества"
 const cheaps = ["ChatGPT & Claude", "Midjourney", "Никаких капч"];
 
 </script>
