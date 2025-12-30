@@ -19,6 +19,7 @@ import PH2 from '~/assets/images/ph2.png'
     width: 552px;
     height: 622px;
 }
+
 .main_phone {
     position: absolute;
     bottom: 0;
@@ -28,6 +29,7 @@ import PH2 from '~/assets/images/ph2.png'
     height: 622px;
     z-index: 2;
 }
+
 .small_phone {
     position: absolute;
     bottom: 0;
@@ -40,6 +42,9 @@ import PH2 from '~/assets/images/ph2.png'
 
 @media (max-width: 1063px) {
     .phones__container {
+        bottom: unset;
+        top: 0px;
+        z-index: -2;
         display: none;
     }
 }

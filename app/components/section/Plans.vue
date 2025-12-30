@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
     <p>{{ description }}</p>
     <div class="plans__container">
-      <p style="white-space: nowrap;">Выберете длительность ➡️</p>
+      <p style="white-space: nowrap;">Выберете длительность {{isBp ? '⬇️' :'➡️'}}</p>
       <UiPlan v-for="plan in listPlans" v-bind="plan"/>
     </div>
   </section>
@@ -13,7 +13,7 @@
 import {PLANS} from '../consts';
 import {computed} from 'vue'
 import type {IPlanView} from "~/components/types/plan";
-
+const isBp = useBP();
 const {plans} = useTariffs()
 const listPlans = computed<IPlanView[]>(() => {
   return plans.value || PLANS
@@ -46,7 +46,7 @@ const description = `Все планы включают максимальную
   .plans__container {
     flex-direction: column;
     gap: 20px;
-    align-items: stretch;
+    align-items: center;
   }
 
   .content__container {

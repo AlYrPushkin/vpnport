@@ -17,4 +17,11 @@
     flex-direction: column;
     gap: 250px;
 }
+@media (max-width: 1063px)  {
+    .content {
+        padding: 48px 24px;
+    padding-bottom: 0px;
+
+    }
+}
 </style>

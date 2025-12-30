@@ -7,24 +7,33 @@
         <div class="links">
             <div class="links__group">
                 <div class="links__group--title">✈️ VPS Port</div>
-                <NuxtLink to="/#main">
+                <NuxtLink to="https://buildin.ai/port/9d423438-8a32-422d-9246-b0842a06a9d6">
                     <span>Политика конфиденциальности</span>
                 </NuxtLink>
-                <NuxtLink to="/#plans">
+                <NuxtLink to="https://buildin.ai/port/615f4d7f-6dc7-41e6-92d8-681e97f4cb46">
                     <span>Пользовательское соглашение</span>
                 </NuxtLink>
             </div>
             <div class="links__group">
                 <div class="links__group--title">💌 Связаться с нами</div>
-                <NuxtLink to="/#faq">
+                <NuxtLink to="https://t.me/vpnportsupport">
                     <span>Telegram Support</span>
                 </NuxtLink>
+                <NuxtLink to="https://forms.gle/qceyWXPNxXWxLvFt7">
+                    <span>Форма поддержки</span>
+                </NuxtLink>
+                 
             </div>
             <div class="links__group">
                 <div class="links__group--title">🔗 Полезные ссылки</div>
-                <NuxtLink to="/#faq">
+                <NuxtLink to="https://t.me/vpn_portbot">
                     <span>Наш бот</span>
+                    
                 </NuxtLink>
+                <NuxtLink to="https://buildin.ai/port/share/08cc713a-4da7-4b19-9ffa-6eb052714c72?code=XPB9WF">
+                    <span>База знаний</span>
+                </NuxtLink>
+                
             </div>
         </div>
     </div>
@@ -96,9 +105,16 @@ const description = "Просматривайте сайты не оставля
         flex-direction: column;
         gap: 32px;
         align-items: flex-start;
-        width: 100%;
+        width: unset;
+        width: 238px;
+        // width: 100%;
     }
-    
+    .links__group {
+        display: flex;
+        width: 238px;
+        justify-content: center;
+        align-items: center;
+    }
     .footer__tag {
         transform: translateX(0);
     }

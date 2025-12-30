@@ -4,6 +4,7 @@
         <div class="cards__container">
             <UiCard v-for="card in CARDS" v-bind="card" class="item" />
         </div>
+        <UiBanner label="Приятный досуг без зависаний интернета даже если белые списки уже в вашем регионе"/>
     </section>
 </template>
 

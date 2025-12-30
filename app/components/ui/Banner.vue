@@ -4,7 +4,7 @@
             <p class="card__description">
                 {{ label }}
             </p>
-            <UiTgButton :label="buttonLabel"/>
+            <UiTgButton :label="buttonLabel" class="banner_btn"/>
         </div>
     </article>
 </template>
@@ -82,6 +82,14 @@ const props = withDefaults(defineProps<{
 }
 
 @media (max-width: 1063px) {
+    .banner_btn {
+        width: 100%;
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
     .card__content {
         flex-direction: column;
         align-items: flex-start;
