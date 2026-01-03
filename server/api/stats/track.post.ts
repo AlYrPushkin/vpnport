@@ -10,15 +10,13 @@ interface LogEntry {
   userAgent: string | null
   timestamp: string
   method: string
-  // Новые поля для отслеживания переходов
   eventType?: 'page_view' | 'outbound_link' | 'page_unload' | 'page_hidden'
-  targetUrl?: string // URL на который перешел пользователь
-  timeOnPage?: number // Время на странице в миллисекундах
+  targetUrl?: string
+  timeOnPage?: number
 }
 
 type LogsByIP = Record<string, LogEntry[]>
 
-// Получение IP адреса из запроса
 function getClientIP(event: any): string {
   const headers = event.node.req.headers
   
@@ -40,14 +38,12 @@ function getClientIP(event: any): string {
   return event.node.req.socket?.remoteAddress || 'unknown'
 }
 
-// Путь к файлу логов
 const getLogFilePath = () => {
   const logsDir = join(process.cwd(), 'logs')
   const today = new Date().toISOString().split('T')[0]
   return join(logsDir, `visitors-${today}.json`)
 }
 
-// Загрузка существующих логов
 async function loadLogs(filePath: string): Promise<LogsByIP> {
   if (!existsSync(filePath)) {
     return {}
@@ -72,12 +68,11 @@ async function loadLogs(filePath: string): Promise<LogsByIP> {
     
     return parsed
   } catch (error) {
-    console.error('Error reading log file, starting fresh:', error)
+    console.error('Error reading log file:', error)
     return {}
   }
 }
 
-// Сохранение логов
 async function saveLogs(filePath: string, logs: LogsByIP): Promise<void> {
   const logsDir = join(process.cwd(), 'logs')
   
@@ -93,32 +88,42 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const ip = getClientIP(event)
     const userAgent = getHeader(event, 'user-agent') || null
-    const referer = getHeader(event, 'referer') || null
     const timestamp = body.timestamp || new Date().toISOString()
-
-    // Парсим текущий URL из body
-    let currentUrl: URL
-    try {
-      currentUrl = new URL(body.currentUrl || 'http://localhost/')
-    } catch {
-      currentUrl = new URL('http://localhost/')
+    
+    // Берем URL из referer (реальный URL страницы), а не из body.currentUrl
+    const referer = getHeader(event, 'referer') || null
+    let pageUrl: URL
+    
+    // Пробуем использовать referer как источник реального URL
+    if (referer) {
+      try {
+        pageUrl = new URL(referer)
+      } catch {
+        pageUrl = new URL(body.currentUrl || 'http://unknown/')
+      }
+    } else {
+      try {
+        pageUrl = new URL(body.currentUrl || 'http://unknown/')
+      } catch {
+        pageUrl = new URL('http://unknown/')
+      }
     }
 
     const queryParams: Record<string, string> = {}
-    currentUrl.searchParams.forEach((value, key) => {
+    pageUrl.searchParams.forEach((value, key) => {
       queryParams[key] = value
     })
 
     const logEntry: LogEntry = {
-      url: currentUrl.href,
-      path: currentUrl.pathname,
+      url: pageUrl.href,
+      path: pageUrl.pathname,
       query: queryParams,
-      referer,
+      referer: null, // Для клиентских событий referer не нужен
       userAgent,
       timestamp,
       method: 'POST',
       eventType: body.type || 'page_view',
-      targetUrl: body.url || undefined,
+      targetUrl: body.targetUrl || undefined,
       timeOnPage: body.timeOnPage || undefined
     }
 
@@ -134,8 +139,7 @@ export default defineEventHandler(async (event) => {
 
     return { success: true }
   } catch (error: any) {
-    console.error('[Track API] Error:', error)
+    console.error('[Track API] Error:', error.message)
     return { success: false, error: error.message }
   }
 })
-

@@ -1,12 +1,14 @@
 export default defineNuxtPlugin(() => {
   if (!import.meta.client) return
 
+  // Флаг чтобы не отправлять дубли при закрытии
+  let unloadSent = false
+
   // Отслеживание кликов по внешним ссылкам
-  const trackOutboundLink = (url: string) => {
-    // Используем sendBeacon для надежной отправки при закрытии страницы
+  const trackOutboundLink = (targetUrl: string) => {
     const data = {
       type: 'outbound_link',
-      url: url,
+      targetUrl: targetUrl,
       timestamp: new Date().toISOString(),
       currentUrl: window.location.href
     }
@@ -18,13 +20,16 @@ export default defineNuxtPlugin(() => {
       body: JSON.stringify(data),
       keepalive: true
     } as any).catch(() => {
-      // Fallback на sendBeacon если fetch не поддерживает keepalive
+      // Fallback на sendBeacon
       navigator.sendBeacon('/api/stats/track', JSON.stringify(data))
     })
   }
 
-  // Отслеживание закрытия вкладки/окна
+  // Отслеживание закрытия вкладки (только один раз)
   const trackPageUnload = () => {
+    if (unloadSent) return
+    unloadSent = true
+
     const data = {
       type: 'page_unload',
       timestamp: new Date().toISOString(),
@@ -32,7 +37,6 @@ export default defineNuxtPlugin(() => {
       timeOnPage: Date.now() - (window as any).__pageLoadTime
     }
 
-    // sendBeacon гарантирует отправку даже при закрытии страницы
     navigator.sendBeacon('/api/stats/track', JSON.stringify(data))
   }
 
@@ -60,29 +64,8 @@ export default defineNuxtPlugin(() => {
     } catch (e) {
       // Игнорируем некорректные URL
     }
-  }, true) // Используем capture phase для перехвата всех кликов
+  }, true)
 
-  // Отслеживание закрытия вкладки
-  window.addEventListener('beforeunload', () => {
-    trackPageUnload()
-  })
-
-  // Также отслеживаем unload (на случай если beforeunload не сработал)
-  window.addEventListener('unload', () => {
-    trackPageUnload()
-  })
-
-  // Отслеживание видимости страницы (когда пользователь переключает вкладку)
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      // Страница скрыта - возможно пользователь переключил вкладку
-      const data = {
-        type: 'page_hidden',
-        timestamp: new Date().toISOString(),
-        currentUrl: window.location.href
-      }
-      navigator.sendBeacon('/api/stats/track', JSON.stringify(data))
-    }
-  })
+  // Отслеживание закрытия вкладки (только beforeunload, без дублей)
+  window.addEventListener('beforeunload', trackPageUnload)
 })
-

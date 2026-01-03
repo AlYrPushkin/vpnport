@@ -23,12 +23,12 @@ useSeoMeta({
   ogDescription: description,
   ogType: 'website',
   ogUrl: siteUrl,
-  ogImage: '/og.png',
+  ogImage: `${siteUrl}/op.png`,
   ogSiteName: siteName,
   twitterCard: 'summary_large_image',
   twitterTitle: title,
   twitterDescription: description,
-  twitterImage: '/og.png',
+  twitterImage: `${siteUrl}/op.png`,
   robots: 'index, follow',
   themeColor: '#1a1a1f'
 })
