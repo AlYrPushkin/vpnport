@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import {useTgStartLink} from "~/composables/useTgLink";
+import { TELEGRAM_BOT_URL } from '../consts';
 
 interface ITGButtonProps {
   label?: string,
@@ -24,7 +25,7 @@ interface ITGButtonProps {
 
 const props = defineProps<ITGButtonProps>()
 const data = useTgStartLink()
-const link = computed((): string => props.to || data.value || 'https://t.me/vpn_portbot')
+const link = computed((): string => props.to || data.value || TELEGRAM_BOT_URL)
 </script>
 
 <style scoped>

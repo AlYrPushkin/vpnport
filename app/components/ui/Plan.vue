@@ -27,9 +27,10 @@
 
 <script setup lang="ts">
 import type {IPlanView} from '../types/plan';
+import { TELEGRAM_BOT_URL } from '../consts';
 
 const data = useTgStartLink()
-const link = computed((): string => data.value || 'https://t.me/vpn_portbot')
+const link = computed((): string => data.value || TELEGRAM_BOT_URL)
 
 const {
   name,

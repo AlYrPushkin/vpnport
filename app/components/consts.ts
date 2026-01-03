@@ -2,6 +2,7 @@ import type {ICard} from "./types/card"
 import type {IPlan, IPlanView} from "./types/plan"
 
 export const BEST_PLAN = "3 мес"
+export const TELEGRAM_BOT_URL = "https://t.me/vpn_portbot"
 
 const PLANS: IPlanView[] = [
     {

@@ -26,7 +26,7 @@
             </div>
             <div class="links__group">
                 <div class="links__group--title">🔗 Полезные ссылки</div>
-                <NuxtLink to="https://t.me/vpn_portbot">
+                <NuxtLink :to="TELEGRAM_BOT_URL">
                     <span>Наш бот</span>
                     
                 </NuxtLink>
@@ -39,6 +39,8 @@
     </div>
 </template>
 <script setup lang="ts">
+import { TELEGRAM_BOT_URL } from "./consts";
+
 const title = "Сохраните конфиденциальность";
 const description = "Просматривайте сайты не оставляя за собой цифровых следов";
 </script>

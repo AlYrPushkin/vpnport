@@ -31,6 +31,9 @@ RUN \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --prod --frozen-lockfile --ignore-scripts && pnpm store prune; \
   fi
 
+# Создаем папку logs с правильными правами для логирования посетителей
+RUN mkdir -p /app/logs && chown -R nuxtjs:nodejs /app/logs
+
 USER nuxtjs
 
 EXPOSE 3000
