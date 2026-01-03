@@ -35,6 +35,10 @@ interface LogEntry {
   userAgent: string | null
   timestamp: string
   method: string
+  // Поля для отслеживания переходов
+  eventType?: 'page_view' | 'outbound_link' | 'page_unload' | 'page_hidden'
+  targetUrl?: string // URL на который перешел пользователь
+  timeOnPage?: number // Время на странице в миллисекундах
 }
 
 // Структура: { [ip: string]: LogEntry[] }
@@ -125,10 +129,29 @@ export default defineEventHandler(async (event) => {
       referer,
       userAgent,
       timestamp,
-      method
+      method,
+      eventType: 'page_view' // По умолчанию это просмотр страницы
     }
 
     const logFilePath = getLogFilePath()
+    const logsDir = join(process.cwd(), 'logs')
+    
+    // Проверяем доступность папки logs
+    if (!existsSync(logsDir)) {
+      try {
+        await mkdir(logsDir, { recursive: true })
+        console.log(`[Visitor Logger] Created logs directory: ${logsDir}`)
+      } catch (mkdirError: any) {
+        console.error(`[Visitor Logger] Failed to create logs directory: ${logsDir}`, mkdirError)
+        console.error(`[Visitor Logger] Error details:`, {
+          code: mkdirError.code,
+          message: mkdirError.message,
+          cwd: process.cwd()
+        })
+        return
+      }
+    }
+    
     const logs = await loadLogs(logFilePath)
     
     // Добавляем новую запись к IP адресу
@@ -138,10 +161,34 @@ export default defineEventHandler(async (event) => {
     logs[ip].push(logEntry)
     
     // Сохраняем обновленный объект
-    await saveLogs(logFilePath, logs)
-  } catch (error) {
-    // Тихая ошибка - не ломаем сайт из-за проблем с логированием
-    console.error('Visitor logging error:', error)
+    try {
+      await saveLogs(logFilePath, logs)
+    } catch (writeError: any) {
+      console.error(`[Visitor Logger] Failed to write log file: ${logFilePath}`, writeError)
+      console.error(`[Visitor Logger] Write error details:`, {
+        code: writeError.code,
+        message: writeError.message,
+        path: logFilePath,
+        cwd: process.cwd()
+      })
+      // Пробуем проверить права доступа
+      const { access, constants } = await import('fs/promises')
+      try {
+        await access(logsDir, constants.W_OK)
+        console.log(`[Visitor Logger] Directory is writable: ${logsDir}`)
+      } catch (accessError) {
+        console.error(`[Visitor Logger] Directory is NOT writable: ${logsDir}`, accessError)
+      }
+    }
+  } catch (error: any) {
+    // Более детальное логирование ошибок
+    console.error('[Visitor Logger] Unexpected error:', error)
+    console.error('[Visitor Logger] Error details:', {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      cwd: process.cwd()
+    })
   }
 })
 

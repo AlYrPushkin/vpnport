@@ -10,6 +10,9 @@ interface LogEntry {
   userAgent: string | null
   timestamp: string
   method: string
+  eventType?: 'page_view' | 'outbound_link' | 'page_unload' | 'page_hidden'
+  targetUrl?: string
+  timeOnPage?: number
 }
 
 // Структура: { [ip: string]: LogEntry[] }
